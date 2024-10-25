@@ -1,0 +1,101 @@
+/* 1 */
+CREATE VIEW vista_estudiantes_carreras AS
+SELECT e.idestudiante, e.nombre, e.apellido, c.idcarrera
+FROM estudiantes e
+JOIN carreras c
+ON e.idcarrera = c.idcarrera;
+
+SELECT * FROM vista_estudiantes_carreras;
+
+
+/* 2 */
+CREATE VIEW vista_materias_carrera AS
+SELECT c.idcarrera, c.nombre AS nombrecarrera, m.idmateria, m.nombre AS nombremateria
+FROM carreras c
+JOIN materias m
+ON c.idcarrera = m.idcarrera;
+
+SELECT * FROM vista_materias_carrera;
+
+
+/* 3 */
+CREATE VIEW vista_notas_estudiantes AS
+SELECT 
+    e.idestudiante,
+    CONCAT(e.nombre, ' ', e.apellido) AS nombrecompleto,
+    n.idmateria,
+    n.valor,
+    n.idtiponota
+FROM 
+    estudiantes e
+JOIN 
+    notas n ON e.idestudiante = n.idestudiante
+JOIN 
+    materias m ON n.idmateria = m.idmateria;
+
+SELECT * FROM vista_notas_estudiantes;
+
+
+/* 4 */
+CREATE VIEW vista_inscripciones_activas AS
+SELECT 
+    e.idestudiante,
+    CONCAT(e.nombre, ' ', e.apellido) AS nombrecompleto,
+    m.idmateria,
+    m.nombre AS nombremateria
+FROM 
+    estudiantes e
+JOIN 
+    inscripciones i ON e.idestudiante = i.idestudiante
+JOIN 
+    materias m ON i.idmateria = m.idmateria
+WHERE 
+    i.estado = 'Activo';
+
+SELECT * FROM vista_inscripciones_activas;
+
+/* 5 */
+CREATE VIEW vista_correlatividades AS
+SELECT mp.nombre AS materia_padre, 
+       mh.nombre AS materia_hijo
+FROM correlatividades c
+JOIN materias mp ON c.idmateriapadre = mp.idmateria
+JOIN materias mh ON c.idmateriahijo = mh.idmateria
+ORDER BY mh.nombre, mp.nombre;
+
+SELECT * FROM vista_correlatividades;
+
+/* 6 */
+CREATE VIEW vista_permisos_usuarios AS
+SELECT 
+    u.nombre AS nombre_usuario, 
+    p.nombre AS nombre_permiso
+FROM 
+    usuarios_permisos up
+JOIN 
+    usuarios u ON up.idusuario = u.idusuario
+JOIN 
+    permisos p ON up.idpermiso = p.idpermiso;
+
+SELECT * FROM vista_permisos_usuarios;
+
+
+/* 7 */
+CREATE VIEW vista_mesas_examen AS 
+SELECT m.nombre AS materia, me.fechahora AS fechahora 
+FROM mesas me 
+JOIN materias m ON me.idmateria = m.idmateria;
+
+SHOW CREATE VIEW vista_mesas_examen;
+
+DROP VIEW vista_mesas_examen;
+
+
+
+
+
+
+
+
+
+
